@@ -2,7 +2,7 @@ from yandex_music import Client
 import os
 
 def search_music(music_name):
-    client = Client.from_credentials('kasimovjavohir01@icloud.com','kasimov01')    
+    client = Client.from_credentials('yandex-music-login','password')    
     search_result = client.search(music_name)
     print(search_result)
     if search_result.best:
@@ -28,7 +28,7 @@ def search_music(music_name):
 
 
 def download_world_tracks(CHART_ID,user_id):
-    client = Client.from_credentials('kasimovjavohir01@icloud.com','kasimov01')
+    client = Client.from_credentials('yandex-music-login','password')
     world_chart = client.chart(CHART_ID).chart
     musics_path = f'./musics/{CHART_ID}/{user_id}/'
     os.mkdir(musics_path)

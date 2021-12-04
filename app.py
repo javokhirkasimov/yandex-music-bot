@@ -6,7 +6,7 @@ import asyncio
 import concurrent.futures
 
 
-TOKEN = '2030399731:AAH5kr6GtOPPd12IFematnEl2Xep6hrtpXA'
+TOKEN = 'your-bot-token'
 bot = Bot(TOKEN)
 dp = Dispatcher(bot)
 
