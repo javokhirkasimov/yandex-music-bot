@@ -1,45 +1,43 @@
-from time import sleep
 from yandex_music import Client
+import os
 
-RUSSIA_ID='russia'
-CHART_ID="world"
-UZ_ID='uzbekistan'
-client = Client.from_credentials('kasimovjavohir01@icloud.com','kasimov01')
-world_chart = client.chart(CHART_ID).chart
-ru_chart=client.chart(RUSSIA_ID).chart
-uz_chart=client.chart(UZ_ID).chart
+def search_music(music_name):
+    client = Client.from_credentials('kasimovjavohir01@icloud.com','kasimov01')    
+    search_result = client.search(music_name)
+    print(search_result)
+    if search_result.best:
+
+        type_ = search_result.best.type
+        best = search_result.best.result
+        print(type_)            
+        if type_ == 'track':
+            if best.artists:
+                artists = ""
+                artists = ' - ' + ', '.join(artist.name for artist in best.artists)
+            return search_result.best.result.download(filename=f"./musics/{best.title + artists}.mp3")
+        elif type_ == 'artist':
+            return {"artist":best.name}
+        elif type_ in ['album', 'podcast']:
+            return {"album":best.title}
+        elif type_ == 'playlist':
+                return {"playlist":best.title}
+        else:
+            return 'Non' 
+    else:
+        return 'Non'
 
 
-def download_world_tracks():
-    musics_path = './musics/world/'
+def download_world_tracks(CHART_ID,user_id):
+    client = Client.from_credentials('kasimovjavohir01@icloud.com','kasimov01')
+    world_chart = client.chart(CHART_ID).chart
+    musics_path = f'./musics/{CHART_ID}/{user_id}/'
+    os.mkdir(musics_path)
     count = 0
     for m in world_chart.tracks:
         count += 1
         print(f'{m.chart.position}-{m.track.title}')
-        m.track.download(filename=f'{musics_path}{m.track.title}.mp3')
-        sleep(1)
-        if count == 10:
-            return
-
-def download_russia_tracks():
-    musics_path = './musics/russia/'
-    count = 0
-    for m in ru_chart.tracks:
-        count += 1
-        print(f'{m.chart.position}-{m.track.title}')
-        m.track.download(filename=f'{musics_path}{m.track.title}.mp3')
-        sleep(1)
-        if count == 10:
-            return
-
-
-def download_uzbek_tracks():
-    musics_path = './musics/uzbek/'
-    count = 0
-    for m in uz_chart.tracks:
-        count += 1
-        print(f'{m.chart.position}-{m.track.title}')
-        m.track.download(filename=f'{musics_path}{m.track.title}.mp3')
-        sleep(1)
+        artists = ""
+        artists = ' - ' + ', '.join(artist.name for artist in m.track.artists)
+        m.track.download(filename=f'{musics_path}{m.track.title}{artists}.mp3')
         if count == 10:
             return
